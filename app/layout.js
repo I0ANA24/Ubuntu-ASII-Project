@@ -1,7 +1,7 @@
 import { Ubuntu } from "next/font/google";
 import "./globals.css";
-import TopBar from "@/components/TopBar";
-import BottomBar from "@/components/bottom bar/BottomBar";
+import TopBar from "@/components/topBar/TopBar";
+import BottomBar from "@/components/bottomBar/BottomBar";
 
 const ubuntu = Ubuntu({
   variable: "--font-ubuntu",
