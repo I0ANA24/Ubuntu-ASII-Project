@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import DesktopArea from "@/components/desktop/DesktopArea";
 
 export default function Home() {
   useEffect(() => {
@@ -43,7 +44,7 @@ export default function Home() {
 
   return (
     <div className="w-full min-h-screen bg-transparent">
-      {/* conținutul paginii */}
+      <DesktopArea />
     </div>
   );
 }

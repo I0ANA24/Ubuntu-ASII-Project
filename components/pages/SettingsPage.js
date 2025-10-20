@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import useDraggableWindow from "@/hooks/useDraggableWindow";
 
 const SettingsPage = ({ onClose }) => {
   const backgrounds = [
@@ -179,6 +180,9 @@ header .date, header .time,
     return () => document.removeEventListener("keydown", onKey);
   }, [onClose]);
 
+  const { windowRef: panelRef, style: panelTransform, handlePointerDown: startDragging } =
+    useDraggableWindow();
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
       {/* Backdrop */}
@@ -192,9 +196,14 @@ header .date, header .time,
       <div
         role="dialog"
         aria-modal="true"
+        ref={panelRef}
+        style={panelTransform}
         className="relative z-50 w-full max-w-xl bg-white dark:bg-gray-900 rounded-xl shadow-2xl p-5 md:p-6 max-h-[92vh] overflow-auto"
       >
-        <div className="relative flex items-center justify-between mb-6">
+        <div
+          className="relative flex items-center justify-between mb-6 cursor-move"
+          onPointerDown={startDragging}
+        >
           <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Setări</h2>
 
           {/* Close button */}
