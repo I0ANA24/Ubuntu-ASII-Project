@@ -20,6 +20,16 @@ const SettingsPage = ({ onClose }) => {
     }
   });
 
+  // theme: true = black mode (default), false = white mode
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    try {
+      const v = localStorage.getItem("isDarkMode");
+      return v === null ? true : v === "true";
+    } catch {
+      return true;
+    }
+  });
+
   useEffect(() => {
     const file = backgrounds[bgIndex] || backgrounds[0];
     const url = `${window.location.origin}/background/${file}`;
@@ -54,6 +64,112 @@ const SettingsPage = ({ onClose }) => {
 
     console.log("Applied background:", url);
   }, [bgIndex]);
+
+  // apply theme (topbar background + date/time text color + bottombar background)
+  useEffect(() => {
+    const styleId = "asa-theme-overrides";
+
+    const ensureStyleTag = () => {
+      let s = document.getElementById(styleId);
+      if (!s) {
+        s = document.createElement("style");
+        s.id = styleId;
+        document.head.appendChild(s);
+      }
+      return s;
+    };
+
+    const applyTheme = (dark) => {
+      const topbarBg = dark ? "#000000" : "#ffffff";
+      const topbarText = dark ? "#ffffff" : "#000000";
+
+      // set CSS variables on :root so components can use them in css
+      try {
+        document.documentElement.style.setProperty("--topbar-bg", topbarBg);
+        document.documentElement.style.setProperty("--topbar-text", topbarText);
+        document.documentElement.style.setProperty("--bottombar-bg", topbarBg);
+        document.documentElement.style.setProperty("--bottombar-text", topbarText);
+      } catch {}
+
+      // Inject/replace a stylesheet with strong rules to override component classes
+      const styleTag = ensureStyleTag();
+      styleTag.innerHTML = `
+:root {
+  --topbar-bg: ${topbarBg};
+  --topbar-text: ${topbarText};
+  --bottombar-bg: ${topbarBg};
+  --bottombar-text: ${topbarText};
+}
+
+/* Topbar */
+header, .topbar, #topbar, nav, .top-bar, .app-topbar {
+  background-color: var(--topbar-bg) !important;
+  color: var(--topbar-text) !important;
+  z-index: 50 !important;
+}
+
+/* Bottom bar */
+footer, .bottombar, #bottombar, .bottom-bar, .app-bottombar {
+  background-color: var(--bottombar-bg) !important;
+  color: var(--bottombar-text) !important;
+  z-index: 50 !important;
+}
+
+/* date/time selectors — many variants to cover different markup */
+header .date, header .time,
+.topbar .date, .topbar .time,
+.date, .time, .datetime, .date-time, #time {
+  color: var(--topbar-text) !important;
+  z-index: 60 !important;
+}
+`;
+
+      // Also set inline styles for immediate effect (fallback)
+      // NOTE: do NOT change 'position' here to avoid breaking fixed/sticky bars
+      const topbarSelectors = "header, .topbar, #topbar, nav, .top-bar, .app-topbar";
+      document.querySelectorAll(topbarSelectors).forEach((el) => {
+        try {
+          el.style.setProperty("background-color", topbarBg, "important");
+          el.style.setProperty("color", topbarText, "important");
+          el.style.setProperty("z-index", "50", "important");
+        } catch {
+          el.style.backgroundColor = topbarBg;
+          el.style.color = topbarText;
+          el.style.zIndex = "50";
+        }
+      });
+
+      const bottombarSelectors = "footer, .bottombar, #bottombar, .bottom-bar, .app-bottombar";
+      document.querySelectorAll(bottombarSelectors).forEach((el) => {
+        try {
+          el.style.setProperty("background-color", topbarBg, "important");
+          el.style.setProperty("color", topbarText, "important");
+          el.style.setProperty("z-index", "50", "important");
+        } catch {
+          el.style.backgroundColor = topbarBg;
+          el.style.color = topbarText;
+          el.style.zIndex = "50";
+        }
+      });
+
+      const dateSelectors = "header .date, header .time, .topbar .date, .topbar .time, .date, .time, .datetime, .date-time, #time";
+      document.querySelectorAll(dateSelectors).forEach((el) => {
+        try {
+          el.style.setProperty("color", topbarText, "important");
+          el.style.setProperty("z-index", "60", "important");
+        } catch {
+          el.style.color = topbarText;
+          el.style.zIndex = "60";
+        }
+      });
+    };
+
+    applyTheme(isDarkMode);
+    try {
+      localStorage.setItem("isDarkMode", String(isDarkMode));
+      window.dispatchEvent(new CustomEvent("asa:theme-changed", { detail: isDarkMode }));
+    } catch {}
+  }, [isDarkMode]);
 
   useEffect(() => {
     const onKey = (e) => {
@@ -106,12 +222,38 @@ const SettingsPage = ({ onClose }) => {
         </div>
 
         <section className="space-y-6">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b pb-4">
-            <div>
+          {/* Theme switch */}
+          <div className="flex items-center justify-between border-b pb-4">
+            <div className="flex-1">
+              <h3 className="font-medium text-gray-800 dark:text-gray-200">Temă</h3>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                role="switch"
+                aria-checked={isDarkMode}
+                aria-label="Comutator temă"
+                onClick={() => setIsDarkMode((v) => !v)}
+                className={`relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ${isDarkMode ? "bg-gray-800" : "bg-gray-200"}`}
+              >
+                <span
+                  className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform duration-200 ${isDarkMode ? "translate-x-7" : "translate-x-1"}`}
+                />
+              </button>
+
+              <span className="text-sm font-medium text-gray-800 dark:text-gray-200">
+                {isDarkMode ? "Black" : "White"}
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between border-b pb-4">
+            <div className="flex-1">
               <h3 className="font-medium text-gray-800 dark:text-gray-200">Fundal</h3>
             </div>
 
-            <div className="mt-2 md:mt-0 flex items-center gap-3">
+            <div className="flex items-center gap-3">
               {/* Prev */}
               <button
                 onClick={() => setBgIndex((i) => (i - 1 + backgrounds.length) % backgrounds.length)}
@@ -140,6 +282,8 @@ const SettingsPage = ({ onClose }) => {
               </button>
             </div>
           </div>
+
+          
         </section>
       </div>
     </div>
