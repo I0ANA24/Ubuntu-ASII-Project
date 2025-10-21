@@ -5,8 +5,6 @@ import SettingsPage from "@/components/pages/SettingsPage";
 import NotepadPage from "@/components/pages/NotepadPage";
 import FileExplorerPage from "@/components/pages/FileExplorerPage";
 import CalculatorPage from "@/components/pages/CalculatorPage";
-// import Etch-a-Sketch page
-import EtchASketchPage from "@/components/pages/EtchASketchPage";
 
 const AppManagerContext = createContext(null);
 
@@ -23,7 +21,6 @@ const AppManagerProvider = ({ children }) => {
   const [showNotepad, setShowNotepad] = useState(false);
   const [showFileExplorer, setShowFileExplorer] = useState(false);
   const [showCalculator, setShowCalculator] = useState(false);
-  const [showEtch, setShowEtch] = useState(false);
   const [notepadRequest, setNotepadRequest] = useState(null);
 
   const openSettings = () => setShowSettings(true);
@@ -44,11 +41,6 @@ const AppManagerProvider = ({ children }) => {
   const openCalculator = () => setShowCalculator(true);
   const toggleCalculator = () => setShowCalculator((prev) => !prev);
   const closeCalculator = () => setShowCalculator(false);
-
-  // Etch-a-Sketch controls
-  const openEtch = () => setShowEtch(true);
-  const toggleEtch = () => setShowEtch((prev) => !prev);
-  const closeEtch = () => setShowEtch(false);
 
   const requestNotepad = (request) => {
     setNotepadRequest(request || null);
@@ -92,16 +84,8 @@ const AppManagerProvider = ({ children }) => {
         open: openCalculator,
         toggle: toggleCalculator,
       },
-      etch: {
-        id: "etch",
-        title: "Etch-a-Sketch",
-        icon: "/icons/etch-a-sketch.png",
-        isOpen: showEtch,
-        open: openEtch,
-        toggle: toggleEtch,
-      },
     }),
-    [showNotepad, showFileExplorer, showSettings, showCalculator, showEtch],
+    [showNotepad, showFileExplorer, showSettings, showCalculator],
   );
 
   const openAppById = (appId) => {
@@ -119,7 +103,6 @@ const AppManagerProvider = ({ children }) => {
     showNotepad,
     showFileExplorer,
     showCalculator,
-    showEtch,
     apps,
     openSettings,
     toggleSettings,
@@ -133,9 +116,6 @@ const AppManagerProvider = ({ children }) => {
     openCalculator,
     toggleCalculator,
     closeCalculator,
-    openEtch,
-    toggleEtch,
-    closeEtch,
     requestNotepad,
     openAppById,
   };
@@ -169,7 +149,6 @@ const AppManagerProvider = ({ children }) => {
       {showSettings && <SettingsPage onClose={closeSettings} />}
 
       {showCalculator && <CalculatorPage onClose={closeCalculator} />}
-      {showEtch && <EtchASketchPage onClose={closeEtch} />}
     </AppManagerContext.Provider>
   );
 };
