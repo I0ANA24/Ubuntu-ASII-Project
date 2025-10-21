@@ -6,6 +6,7 @@ import NotepadPage from "@/components/pages/NotepadPage";
 import FileExplorerPage from "@/components/pages/FileExplorerPage";
 import CalculatorPage from "@/components/pages/CalculatorPage";
 import EtchASketchPage from "@/components/pages/EtchASketchPage";
+import TicTacToePage from "@/components/pages/TicTacToePage";
 
 const AppManagerContext = createContext(null);
 
@@ -23,6 +24,7 @@ const AppManagerProvider = ({ children }) => {
   const [showFileExplorer, setShowFileExplorer] = useState(false);
   const [showCalculator, setShowCalculator] = useState(false);
   const [showEtchASketch, setShowEtchASketch] = useState(false);
+  const [showTicTacToe, setShowTicTacToe] = useState(false);
   const [notepadRequest, setNotepadRequest] = useState(null);
 
   const openSettings = () => setShowSettings(true);
@@ -48,6 +50,10 @@ const AppManagerProvider = ({ children }) => {
   const toggleEtchASketch = () => setShowEtchASketch((prev) => !prev);
   const closeEtchASketch = () => setShowEtchASketch(false);
 
+  const openTicTacToe = () => setShowTicTacToe(true);
+  const toggleTicTacToe = () => setShowTicTacToe((prev) => !prev);
+  const closeTicTacToe = () => setShowTicTacToe(false);
+
   const requestNotepad = (request) => {
     setNotepadRequest(request || null);
     setShowNotepad(true);
@@ -55,52 +61,57 @@ const AppManagerProvider = ({ children }) => {
 
   const resetNotepadRequest = () => setNotepadRequest(null);
 
-  const apps = useMemo(
-    () => ({
-      notepad: {
-        id: "notepad",
-        title: "Notepad",
-        icon: "/icons/notepad.png",
-        isOpen: showNotepad,
-        open: openNotepad,
-        toggle: toggleNotepad,
-        request: requestNotepad,
-      },
-      fileExplorer: {
-        id: "fileExplorer",
-        title: "File Explorer",
-        icon: "/icons/files.png",
-        isOpen: showFileExplorer,
-        open: openFileExplorer,
-        toggle: toggleFileExplorer,
-      },
-      settings: {
-        id: "settings",
-        title: "Settings",
-        icon: "/icons/settings.png",
-        isOpen: showSettings,
-        open: openSettings,
-        toggle: toggleSettings,
-      },
-      calculator: {
-        id: "calculator",
-        title: "Calculator",
-        icon: "/icons/calculator.png",
-        isOpen: showCalculator,
-        open: openCalculator,
-        toggle: toggleCalculator,
-      },
-      etchASketch: {
-        id: "etchASketch",
-        title: "Etch-a-Sketch",
-        icon: "/icons/etch-a-sketch.png",
-        isOpen: showEtchASketch,
-        open: openEtchASketch,
-        toggle: toggleEtchASketch,
-      },
-    }),
-    [showNotepad, showFileExplorer, showSettings, showCalculator, showEtchASketch],
-  );
+  const apps = {
+    notepad: {
+      id: "notepad",
+      title: "Notepad",
+      icon: "/icons/notepad.png",
+      isOpen: showNotepad,
+      open: openNotepad,
+      toggle: toggleNotepad,
+      request: requestNotepad,
+    },
+    fileExplorer: {
+      id: "fileExplorer",
+      title: "File Explorer",
+      icon: "/icons/files.png",
+      isOpen: showFileExplorer,
+      open: openFileExplorer,
+      toggle: toggleFileExplorer,
+    },
+    settings: {
+      id: "settings",
+      title: "Settings",
+      icon: "/icons/settings.png",
+      isOpen: showSettings,
+      open: openSettings,
+      toggle: toggleSettings,
+    },
+    calculator: {
+      id: "calculator",
+      title: "Calculator",
+      icon: "/icons/calculator.png",
+      isOpen: showCalculator,
+      open: openCalculator,
+      toggle: toggleCalculator,
+    },
+    etchASketch: {
+      id: "etchASketch",
+      title: "Etch-a-Sketch",
+      icon: "/icons/etch-a-sketch.png",
+      isOpen: showEtchASketch,
+      open: openEtchASketch,
+      toggle: toggleEtchASketch,
+    },
+    ticTacToe: {
+      id: "ticTacToe",
+      title: "Tic Tac Toe",
+      icon: "/icons/tic-tac-toe.png",
+      isOpen: showTicTacToe,
+      open: openTicTacToe,
+      toggle: toggleTicTacToe,
+    },
+  };
 
   const openAppById = (appId) => {
     const app = apps[appId];
@@ -134,6 +145,9 @@ const AppManagerProvider = ({ children }) => {
     openEtchASketch,
     toggleEtchASketch,
     closeEtchASketch,
+    openTicTacToe,
+    toggleTicTacToe,
+    closeTicTacToe,
     requestNotepad,
     openAppById,
   };
@@ -169,6 +183,8 @@ const AppManagerProvider = ({ children }) => {
       {showCalculator && <CalculatorPage onClose={closeCalculator} />}
 
       {showEtchASketch && <EtchASketchPage onClose={closeEtchASketch} />}
+
+      {showTicTacToe && <TicTacToePage onClose={closeTicTacToe} />}
     </AppManagerContext.Provider>
   );
 };

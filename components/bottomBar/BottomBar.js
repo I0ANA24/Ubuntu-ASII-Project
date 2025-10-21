@@ -5,12 +5,21 @@ import Icon from "./Icon";
 import { useAppManager } from "@/contexts/AppManagerContext";
 
 const BottomBar = () => {
-  const { apps, toggleNotepad, toggleFileExplorer, toggleSettings, toggleCalculator, toggleEtchASketch } = useAppManager();
+  const {
+    apps,
+    toggleNotepad,
+    toggleFileExplorer,
+    toggleSettings,
+    toggleCalculator,
+    toggleEtchASketch,
+    toggleTicTacToe,
+  } = useAppManager();
 
   const notepadApp = apps.notepad;
   const fileExplorerApp = apps.fileExplorer;
   const settingsApp = apps.settings;
   const etchASketchApp = apps.etchASketch;
+  const ticTacToe = apps.ticTacToe;
 
   return (
     <footer className="w-full h-11 absolute bottom-0 left-0 bg-black/70 text-white flex justify-center items-center p-1 space-x-1.5">
@@ -36,7 +45,13 @@ const BottomBar = () => {
         onClick={toggleEtchASketch}
         draggableData={{ appId: etchASketchApp.id }}
       />
-      <Icon src="/icons/tic-tac-toe.png" />
+      <Icon
+        src="/icons/tic-tac-toe.png"
+        alt="Tic Tac Toe"
+        isActive={apps.ticTacToe.isOpen}
+        onClick={toggleTicTacToe}
+        draggableData={{ appId: apps.ticTacToe.id }}
+      />
       <Icon
         src={apps.calculator.icon}
         alt={apps.calculator.title}
