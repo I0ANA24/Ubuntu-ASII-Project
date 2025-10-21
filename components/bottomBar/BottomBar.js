@@ -5,7 +5,7 @@ import Icon from "./Icon";
 import { useAppManager } from "@/contexts/AppManagerContext";
 
 const BottomBar = () => {
-  const { apps, toggleNotepad, toggleFileExplorer, toggleSettings } = useAppManager();
+  const { apps, toggleNotepad, toggleFileExplorer, toggleSettings, toggleCalculator } = useAppManager();
 
   const notepadApp = apps.notepad;
   const fileExplorerApp = apps.fileExplorer;
@@ -30,7 +30,13 @@ const BottomBar = () => {
       />
       <Icon src="/icons/etch-a-sketch.png" />
       <Icon src="/icons/tic-tac-toe.png" />
-      <Icon src="/icons/calculator.png" />
+      <Icon
+        src={apps.calculator.icon}
+        alt={apps.calculator.title}
+        isActive={apps.calculator.isOpen}
+        onClick={toggleCalculator}
+        draggableData={{ appId: apps.calculator.id }}
+      />
       <div className="bg-gray-500 h-6.5 w-[1px]"></div>
       <Icon
         src={settingsApp.icon}

@@ -1,0 +1,82 @@
+@font-face {
+  font-family: 'Digital-7 Mono';
+  src: url('/fonts/digital7mono.ttf') format('truetype');
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  width: 300px; /* reduced from 365px */
+  padding: 12px;
+  background-color: rgb(0, 126, 253);
+  border-radius: 10px;
+}
+
+.screen {
+  width: 275px; /* reduced from 335px */
+  height: 120px; /* reduced from 150px */
+  border: 5px solid #98ade0;
+  border-radius: 7px;
+  background-color: rgb(193, 220, 231);
+}
+
+.screenUp {
+  width: calc(275px - 10px);
+  height: 40px;
+  margin: 5px 5px 0;
+  font-size: 1.25em;
+  font-family: 'Digital-7 Mono';
+  word-wrap: break-word;
+}
+
+.screenDown {
+  width: calc(275px - 10px);
+  height: 65px;
+  margin: 5px;
+  font-size: 2em;
+  font-family: 'Digital-7 Mono';
+  word-wrap: break-word;
+}
+
+.buttons {
+  width: 275px; /* reduced from 335px */
+  height: 340px; /* reduced from 420px */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.button {
+  width: 65px; /* reduced from 80px */
+  height: 65px; /* reduced from 80px */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.75em;
+  font-weight: bold;
+  background-color: #b6c8f4;
+  border-style: solid;
+  border-width: 3px 7px 10px;
+  border-color: #f1f2fa #98ade0 #809ceb;
+  border-radius: 7px;
+  color: #3f4149;
+  transition: 0.3s ease;
+}
+
+.button:hover {
+  cursor: pointer;
+}
+
+.button:active {
+  background-color: rgb(193, 220, 231);
+  transform: scale(0.9);
+}
+
+.allClear, .clear {
+  background-color: rgb(193, 220, 231);
+}

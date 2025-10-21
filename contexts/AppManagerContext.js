@@ -4,6 +4,7 @@ import React, { createContext, useContext, useMemo, useState } from "react";
 import SettingsPage from "@/components/pages/SettingsPage";
 import NotepadPage from "@/components/pages/NotepadPage";
 import FileExplorerPage from "@/components/pages/FileExplorerPage";
+import CalculatorPage from "@/components/pages/CalculatorPage";
 
 const AppManagerContext = createContext(null);
 
@@ -19,6 +20,7 @@ const AppManagerProvider = ({ children }) => {
   const [showSettings, setShowSettings] = useState(false);
   const [showNotepad, setShowNotepad] = useState(false);
   const [showFileExplorer, setShowFileExplorer] = useState(false);
+  const [showCalculator, setShowCalculator] = useState(false);
   const [notepadRequest, setNotepadRequest] = useState(null);
 
   const openSettings = () => setShowSettings(true);
@@ -35,6 +37,10 @@ const AppManagerProvider = ({ children }) => {
   const openFileExplorer = () => setShowFileExplorer(true);
   const toggleFileExplorer = () => setShowFileExplorer((prev) => !prev);
   const closeFileExplorer = () => setShowFileExplorer(false);
+
+  const openCalculator = () => setShowCalculator(true);
+  const toggleCalculator = () => setShowCalculator((prev) => !prev);
+  const closeCalculator = () => setShowCalculator(false);
 
   const requestNotepad = (request) => {
     setNotepadRequest(request || null);
@@ -70,8 +76,16 @@ const AppManagerProvider = ({ children }) => {
         open: openSettings,
         toggle: toggleSettings,
       },
+      calculator: {
+        id: "calculator",
+        title: "Calculator",
+        icon: "/icons/calculator.png",
+        isOpen: showCalculator,
+        open: openCalculator,
+        toggle: toggleCalculator,
+      },
     }),
-    [showNotepad, showFileExplorer, showSettings],
+    [showNotepad, showFileExplorer, showSettings, showCalculator],
   );
 
   const openAppById = (appId) => {
@@ -88,6 +102,7 @@ const AppManagerProvider = ({ children }) => {
     showSettings,
     showNotepad,
     showFileExplorer,
+    showCalculator,
     apps,
     openSettings,
     toggleSettings,
@@ -98,6 +113,9 @@ const AppManagerProvider = ({ children }) => {
     openFileExplorer,
     toggleFileExplorer,
     closeFileExplorer,
+    openCalculator,
+    toggleCalculator,
+    closeCalculator,
     requestNotepad,
     openAppById,
   };
@@ -129,6 +147,8 @@ const AppManagerProvider = ({ children }) => {
       )}
 
       {showSettings && <SettingsPage onClose={closeSettings} />}
+
+      {showCalculator && <CalculatorPage onClose={closeCalculator} />}
     </AppManagerContext.Provider>
   );
 };
